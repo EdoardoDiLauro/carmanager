@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Cars</h2>
+{% for car in carlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ car.brand }} {{ car.model }} </a></h3>
+             <h4><a>Group: {{ car.group }} | Class: {{ car.cat }} </a></h4>
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('cars.car_detail', car_id=car.id) }}">Manage</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('cars.delete_car', car_id=car.id) }}">Delete</a>
+         </div>
+              <h4><a> INSERIRE TARGA E ACTLIST</a></h4>
+          </div>
+    </article>
+        {% endfor %}
+{% if carlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No cars added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}

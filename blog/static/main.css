@@ -1,0 +1,142 @@
+body {
+  background: #ffffff	;
+  color: #dd002a	;
+  margin-top: 5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+.bg-steel {
+  background-color: #dd002a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.article-title {
+  color: #dd002a;
+}
+
+a.article-title:hover {
+  color: #dd002a;
+  text-decoration: none;
+}
+
+.article-content {
+  white-space: pre-line;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
+}
+
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #dd002a
+}
+
+.article-metadata a:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
+}
+
+.nav-link {
+  color: #dd002a;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #dd002a
+}
+
+.nav-pills .nav-link:hover, .nav-pills .show > .nav-link {
+    border: #dd002a;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #dd002a;
+    border-color: #dd002a
+}
+
+.btn-secondary:hover {
+    color: #fff;
+    background-color: #00225d;
+    border-color: #00225d
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d
+}
+
+
+.btn-outline-info {
+    color: #dd002a;
+    border-color: #dd002a
+}
+
+.btn-outline-info:hover {
+    color: #ffffff;
+    border-color: #dd002a;
+    background-color: #dd002a
+
+}
+
+.btn-outline-info a:hover {
+    color: #ffffff;
+    border-color: #dd002a
+}
+
+.table-active, .table-active > td, .table-active > th {
+    background-color: rgba(66, 109, 155, 0.71)
+}
+
+.table-hover .table-active:hover {
+    background-color: rgba(66, 109, 155, 0.9)
+}

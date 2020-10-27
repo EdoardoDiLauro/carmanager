@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>{{ team.name }}</h2>
+<div class="content-section">
+{% for car in carlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ car.brand }} {{ car.model }} </a></h3>
+             <h4><a>Group: {{ car.group }} | Class: {{ car.cat }} </a></h4>
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('cars.car_detail', car_id=car.id) }}">Manage</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('teams.remove_car', team_id=team.id ,car_id=car.id) }}">Remove</a>
+         </div>
+              <h4><a> INSERIRE TARGA E ACTLIST</a></h4>
+          </div>
+    </article>
+        {% endfor %}
+{% if carlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No cars added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+</div>
+{% endblock content %}
+{% block feed %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ carform.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ carform.car.label(class="form-control-label") }}
+                {% if carform.car.errors %}
+                    {{ carform.car(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in carform.car.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ carform.car(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ carform.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock feed %}
+

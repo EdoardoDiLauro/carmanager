@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Teams</h2>
+{% for team in teamlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ team.name }} </a></h3>
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('teams.team_detail', team_id=team.id) }}">Manage</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('teams.delete_team', team_id=team.id) }}">Delete</a>
+         </div>
+              <h4><a> INSERIRE CARLIST</a></h4>
+          </div>
+    </article>
+        {% endfor %}
+{% if teamlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No teams added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}

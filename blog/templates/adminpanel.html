@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Validation</th>
+            <th scope="col">Status</th>
+            <th scope="col">ID</th>
+          <th scope="col">Username</th>
+          <th scope="col">Inspect</th>
+        </tr>
+      </thead>
+        {% for race in form.users %}
+        <tr class="table-row">
+            <th scope="row">
+            {% for subfield in race.onhold %}
+                {{ subfield.label }}
+                {{ subfield }}
+            {% endfor %}
+            </th>
+            <th scope="row">{{race.status(readonly=True)}}</th>
+            <th scope="row">{{race.rid}}</th>
+            <th scope="row">{{race.nome(readonly=True)}}</th>
+            <th><a class="btn btn-outline-info btn-sm mt-1 mb-1" href="{{ url_for('users.forcelogin', id=race.rid.data) }}">Inspect</a></th>
+        </tr>
+        {% endfor %}
+    </table>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}
