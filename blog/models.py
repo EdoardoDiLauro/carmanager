@@ -9,7 +9,7 @@ def load_user(user_id):
 
 
 linksas=db.Table('linksas',
-            db.Column('sponsor_id', db.Integer, db.ForeignKey('sponsorship.id'), nullable=False),
+            db.Column('sponsor_id', db.Integer, db.ForeignKey('programsponsorship.id'), nullable=False),
             db.Column('activity_id', db.Integer, db.ForeignKey('activity.id'), nullable=False)
 )
 
@@ -125,7 +125,19 @@ class Driver(db.Model):
     def __repr__(self):
         return "Driver ('{self.id}')"
 
-class Sponsorship(db.Model):
+class RaceSponsorship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    totamount = db.Column(db.Integer)
+    sponsor = db.Column(db.String(200), nullable=False)
+    driver = db.Column(db.Integer, db.ForeignKey('driver.id'), nullable=True)
+    car = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=True)
+    sponsored = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return "RaceSponsorship ('{self.id}')"
+
+class ProgramSponsorship(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer)
     sponsor = db.Column(db.String(200), nullable=False)
@@ -135,7 +147,7 @@ class Sponsorship(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return "Sponsorship ('{self.id}')"
+        return "ProgramSponsorship ('{self.id}')"
 
 class Component(db.Model):
     id = db.Column(db.Integer, primary_key=True)
