@@ -20,7 +20,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         pass1 = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        new_user=User(username=form.username.data,email=form.email.data, name=form.name.data, surname=form.surname.data ,password=pass1, onhold=False)
+        new_user=User(username=form.username.data,email=form.email.data, name=form.name.data, password=pass1, onhold=False)
         # change before deployment
         db.session.add(new_user)
         db.session.commit()
@@ -102,7 +102,6 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.name = form.name.data
-        current_user.surname = form.surname.data
         db.session.commit()
         flash('Succesfully updated informations', 'success')
         return redirect(url_for('users.account'))
@@ -110,7 +109,6 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.name.data = current_user.name
-        form.surname.data = current_user.surname
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)

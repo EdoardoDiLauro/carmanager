@@ -3,7 +3,7 @@ from flask import render_template, request, Blueprint, redirect, url_for, flash,
 from flask_login import current_user, login_required
 from blog import db
 from blog.models import Car
-from blog.cars.forms import CarForm
+from blog.cars.forms import CarForm, UpdateCarForm
 from datetime import datetime, time
 
 cars = Blueprint('cars', __name__)
@@ -16,8 +16,8 @@ def create_car():
         return redirect(url_for('main.home'))
     form = CarForm()
     if form.validate_on_submit():
-        if form.plate.data : new_car = Car(brand=form.brand.data, model=form.model.data, cat=form.cat.data, group=form.group.data,plate=form.plate.data, user_id=current_user.id)
-        else:new_car = Car(brand=form.brand.data, model=form.model.data, cat=form.cat.data, group=form.group.data, user_id=current_user.id)
+        if form.notes.data : new_car = Car(brand=form.brand.data, model=form.model.data, kmtot=form.kmtot.data, chassis=form.chassis.data,notes=form.notes.data, user_id=current_user.id)
+        else:new_car = Car(brand=form.brand.data, model=form.model.data, kmtot=form.kmtot.data, chassis=form.chassis.data, user_id=current_user.id)
         db.session.add(new_car)
         db.session.commit()
         flash('New car successfully added', 'success')
@@ -49,4 +49,27 @@ def car_detail(car_id):
     if car.user_id != current_user.id:
         abort(403)
 
-    return render_template('car.html', car=car)
+    form = UpdateCarForm()
+    if form.validate_on_submit():
+        if form.notes.data :
+            car.brand=form.brand.data
+            car.model=form.model.data
+            car.kmtot=form.kmtot.data
+            car.chassis=form.chassis.data
+            car.notes=form.notes.data
+        else:
+            car.brand=form.brand.data
+            car.model=form.model.data
+            car.kmtot=form.kmtot.data
+            car.chassis=form.chassis.data
+        db.session.commit()
+        flash('Car successfully updated', 'success')
+        return redirect(url_for('cars.car_detail', car_id=car_id))
+    elif request.method == 'GET':
+        form.brand.data=car.brand
+        form.model.data=car.model
+        form.kmtot.data=car.kmtot
+        form.chassis.data=car.chassis
+        form.notes.data=car.notes
+
+    return render_template('car.html', car=car, form=form)

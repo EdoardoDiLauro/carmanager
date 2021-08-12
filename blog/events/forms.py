@@ -6,34 +6,25 @@ from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Optional
 
 class EventForm (FlaskForm) :
-    type = RadioField('Type', choices=[(0, 'Test'), (1, 'Race'), (2, 'Restore')], coerce=int,
-                      validators=[DataRequired()])
-    start = DateField('Car Busy',
+    start = DateField('Event Start',
                        validators=[DataRequired()], format='%Y-%m-%d')
-    end = DateField('Car Free',
+    end = DateField('Event End',
                      validators=[DataRequired()], format='%Y-%m-%d')
     name = StringField('Name',
                         validators=[DataRequired()])
-    year = StringField('Year',
-                        validators=[DataRequired()])
-    kms = IntegerField('SS Kms', validators=[Optional()])
+    kmssth = IntegerField('Forecasted SS Kms', validators=[Optional()])
 
-    submit = SubmitField('Add Activity')
+    submit = SubmitField('Add Event')
 
 class UpdateEventForm (FlaskForm) :
-    type = RadioField('Type', choices=[(0, 'Test'), (1, 'Race'), (2, 'Restore')], coerce=int,
-                      validators=[DataRequired()])
-    start = DateField('Car Busy',
-                       validators=[DataRequired()])
-    end = DateField('Car Free',
-                     validators=[DataRequired()])
-    name = StringField('Name',
-                        validators=[DataRequired()])
-    year = StringField('Year',
-                        validators=[DataRequired()])
-    kms = IntegerField('SS Kms', validators=[Optional()])
+    start = DateField('Event Start', format='%Y-%m-%d')
+    end = DateField('Event End', format='%Y-%m-%d')
+    name = StringField('Name')
+    kmssth = IntegerField('Forecasted SS Kms', validators=[Optional()])
 
-    submit = SubmitField('Update Activity')
+    kmssact = IntegerField('Actual SS Usage Kms', validators=[Optional()])
+
+    submit = SubmitField('Update Event')
 
 class AddCarForm(FlaskForm):
     car = SelectField(u'Car', coerce=int, validators=[Optional()])

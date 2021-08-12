@@ -2,7 +2,7 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from blog import db
-from blog.models import Event, Car, Team, Activity, Cd, Cdtype, ProgramSponsorship, RaceSponsorship
+from blog.models import Event, Car, Activity
 from blog.activities.forms import CdForm, SponsorForm, RaceSponsorForm
 from datetime import datetime, time
 

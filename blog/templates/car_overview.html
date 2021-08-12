@@ -6,11 +6,14 @@
           <div class="media-body">
          <div class="article-metadata">
              <h3><a class="mr-2">{{ car.brand }} {{ car.model }} </a></h3>
-             <h4><a>Group: {{ car.group }} | Class: {{ car.cat }} </a></h4>
+             <h4><a>Chassis: {{ car.chassis }} | Total Kms of SS: {{ car.kmtot }} </a></h4>
              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('cars.car_detail', car_id=car.id) }}">Manage</a>
               <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('cars.delete_car', car_id=car.id) }}">Delete</a>
          </div>
-              <h4><a> INSERIRE TARGA E ACTLIST</a></h4>
+              {% for event in car.events %}
+              <h4><a href="{{ url_for('events.event_detail', event_id=event.id) }}"> {{ event.name }}</a></h4>
+              {% endfor %}
+              <div class="card-header">{{car.notes}}</div>
           </div>
     </article>
         {% endfor %}

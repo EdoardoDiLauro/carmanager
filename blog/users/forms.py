@@ -13,9 +13,7 @@ class RegistrationForm (FlaskForm):
                            validators=[DataRequired()])
     email = StringField('Email',
                           validators=[DataRequired(), Email()])
-    name = StringField('Name',
-                           validators=[DataRequired()])
-    surname = StringField('Surname',
+    name = StringField('Team Name',
                            validators=[DataRequired()])
     password = PasswordField('Password',
                           validators=[DataRequired()])
@@ -49,10 +47,8 @@ class UpdateAccountForm (FlaskForm) :
                            validators=[DataRequired()])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
-    name = StringField('Name',
+    name = StringField('Team Name',
                        validators=[DataRequired()])
-    surname = StringField('Surname',
-                          validators=[DataRequired()])
     picture = FileField('Profile Picture (allowed extensions: .jpg, .png)', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 

@@ -31,10 +31,10 @@ def create_app(config_class=Config):
     from blog.main.routes import main
     from blog.users.routes import users
     from blog.cars.routes import cars
-    from blog.teams.routes import teams
     from blog.events.routes import events
     from blog.activities.routes import activities
-    from blog.cdtypes.routes import cdtypes
+    from blog.ccp.routes import ccp
+    from blog.ccd.routes import ccd
 
 
 
@@ -46,10 +46,11 @@ def create_app(config_class=Config):
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(cars)
-    app.register_blueprint(teams)
     app.register_blueprint(events)
     app.register_blueprint(activities)
-    app.register_blueprint(cdtypes)
+    app.register_blueprint(ccp)
+    app.register_blueprint(ccd)
+
 
 
 

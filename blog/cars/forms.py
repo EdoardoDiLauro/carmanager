@@ -1,7 +1,7 @@
 # coding=utf-8
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField
 from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Optional
 
@@ -10,10 +10,21 @@ class CarForm (FlaskForm) :
                         validators=[DataRequired()])
     model = StringField('Model',
                         validators=[DataRequired()])
-    group = StringField('Group',
+    kmtot = IntegerField('Total Kms of SS',
                         validators=[DataRequired()])
-    cat = StringField('Class',
+    chassis = StringField('Chassis Number',
                         validators=[DataRequired()])
-    plate = StringField('License Plate (optional)')
+    notes = TextAreaField('Notes')
     submit = SubmitField('Add Car')
 
+class UpdateCarForm (FlaskForm) :
+    brand = StringField('Brand',
+                        validators=[DataRequired()])
+    model = StringField('Model',
+                        validators=[DataRequired()])
+    kmtot = IntegerField('Total Kms of SS',
+                        validators=[DataRequired()])
+    chassis = StringField('Chassis Number',
+                        validators=[DataRequired()])
+    notes = TextAreaField('Notes')
+    submit = SubmitField('Update Car')

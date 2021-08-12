@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>events</h2>
+    <h2>Events</h2>
 {% for event in eventlist %}
 <article class="media content-section">
           <div class="media-body">
@@ -10,7 +10,8 @@
              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.event_detail', event_id=event.id) }}">Manage</a>
               <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('events.delete_event', event_id=event.id) }}">Delete</a>
          </div>
-          <h4><a> INSERIRE CARLIST</a></h4>
+          <h4><a> INSERIRE CUSTOMER</a></h4>
+              <h4><a> INSERIRE ACTCD</a></h4>
           </div>
     </article>
         {% endfor %}

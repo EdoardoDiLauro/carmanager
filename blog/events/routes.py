@@ -2,36 +2,32 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from blog import db
-from blog.models import Event, Car, Team, Activity
+from blog.models import Event, Car, Activity
 from blog.events.forms import EventForm, UpdateEventForm, AddCarForm
 from datetime import datetime, time
 
 events = Blueprint('events', __name__)
 
-@events.route("/event/new" , methods=['GET', 'POST'])
+@events.route("/event/new/<int:car_id>" , methods=['GET', 'POST'])
 @login_required
-def create_event():
+def create_event(car_id):
     if not current_user.is_authenticated:
         flash('Please log in to access current page', 'danger')
         return redirect(url_for('main.home'))
+
+    car = Car.query.get_or_404(car_id)
+    if car.user_id != current_user.id:
+        abort(403)
+
     form = EventForm()
     if form.validate_on_submit():
-        if form.type.data == 0:
-            new_event = Event(istest=True, name=form.name.data, year=form.year.data, kmss=form.kms.data, start=form.start.data,
-                                    end=form.end.data, user_id=current_user.id)
-        elif form.type.data == 1:
-            new_event = Event(israce=True, name=form.name.data, year=form.year.data, kmss=form.kms.data,
-                                    start=form.start.data,
-                                    end=form.end.data, user_id=current_user.id)
-        elif form.type.data == 2:
-            new_event = Event(isrestore=True, name=form.name.data, year=form.year.data, kmss=form.kms.data,
-                                    start=form.start.data,
-                                    end=form.end.data, user_id=current_user.id)
+        new_event = Event(name=form.name.data, kmssth =form.kmssth.data, kmssact=form.kmssth.data,
+                          start=form.start.data, end=form.end.data, car_id=car.id, user_id=current_user.id)
         db.session.add(new_event)
         db.session.commit()
         flash('New event successfully added', 'success')
         return redirect(url_for('events.overview'))
-    return render_template('create_event.html', title='Add event', form=form, legend='Add event')
+    return render_template('create_event.html', title='Add Event', form=form, legend='Add Event', car=car)
 
 @events.route("/event/overview", methods=['GET', 'POST'])
 @login_required
@@ -59,14 +55,18 @@ def event_detail(event_id):
     if event.user_id != current_user.id:
         abort(403)
 
+    car = Car.query.get_or_404(event.car_id)
+    if car.user_id != current_user.id:
+        abort(403)
+
     form = UpdateEventForm()
 
-    if form.validate():
+    if form.validate() and form.name.data and form.start.data and form.end.data and form.kmssth.data:
         event.name = form.name.data
         event.start = form.start.data
         event.end = form.end.data
-        event.year = form.year.data
-        event.kmss = form.kms.data
+        event.kmssth = form.kmssth.data
+        event.kmssact = form.kmssact.data
         db.session.commit()
         flash('Event successfully updated', 'success')
         return redirect(url_for('events.event_detail', event_id=event_id))
@@ -74,9 +74,9 @@ def event_detail(event_id):
         form.name.data = event.name
         form.start.data = event.start
         form.end.data = event.end
-        form.year.data = event.year
-        form.kms.data = event.kmss
-    return render_template('event.html', event=event, form=form)
+        form.kmssth.data = event.kmssth
+        form.kmssact.data = event.kmssact
+    return render_template('event.html', event=event, form=form, legend='Update Event', car=car)
 
 @events.route("/event/<int:event_id>", methods=['GET','POST'])
 @login_required
