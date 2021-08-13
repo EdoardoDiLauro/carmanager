@@ -14,6 +14,8 @@ class EventForm (FlaskForm) :
                         validators=[DataRequired()])
     kmssth = IntegerField('Forecasted SS Kms', validators=[Optional()])
 
+    ccp = SelectField(u'Car Cost Profile', coerce=int, validators=[Optional()])
+
     submit = SubmitField('Add Event')
 
 class UpdateEventForm (FlaskForm) :
@@ -21,12 +23,6 @@ class UpdateEventForm (FlaskForm) :
     end = DateField('Event End', format='%Y-%m-%d')
     name = StringField('Name')
     kmssth = IntegerField('Forecasted SS Kms', validators=[Optional()])
-
-    kmssact = IntegerField('Actual SS Usage Kms', validators=[Optional()])
-
+    ccp = SelectField(u'Car Cost Profile', coerce=int, validators=[Optional()])
     submit = SubmitField('Update Event')
 
-class AddCarForm(FlaskForm):
-    car = SelectField(u'Car', coerce=int, validators=[Optional()])
-    team = SelectField(u'Team', coerce=int, validators=[Optional()])
-    submit = SubmitField('Assign Car')

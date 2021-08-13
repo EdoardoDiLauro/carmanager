@@ -2,8 +2,8 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from blog import db
-from blog.models import Event, Car, Activity
-from blog.events.forms import EventForm, UpdateEventForm, AddCarForm
+from blog.models import Event, Car, Activity, CarCostProfile
+from blog.events.forms import EventForm, UpdateEventForm
 from datetime import datetime, time
 
 events = Blueprint('events', __name__)
@@ -20,9 +20,12 @@ def create_event(car_id):
         abort(403)
 
     form = EventForm()
-    if form.validate_on_submit():
-        new_event = Event(name=form.name.data, kmssth =form.kmssth.data, kmssact=form.kmssth.data,
-                          start=form.start.data, end=form.end.data, car_id=car.id, user_id=current_user.id)
+
+    form.ccp.choices= [(-1," ")]+[(item.id, item.name) for item in db.session.query(CarCostProfile).filter(CarCostProfile.car_id==car.id)]
+
+    if form.validate_on_submit() and form.ccp.data != -1:
+        new_event = Event(name=form.name.data, kmssth =form.kmssth.data, kmssact=form.kmssth.data, ccp_id=form.ccp.data,
+                          start=form.start.data, customer_id=0 ,end=form.end.data, car_id=car.id, user_id=current_user.id)
         db.session.add(new_event)
         db.session.commit()
         flash('New event successfully added', 'success')
@@ -61,12 +64,14 @@ def event_detail(event_id):
 
     form = UpdateEventForm()
 
-    if form.validate() and form.name.data and form.start.data and form.end.data and form.kmssth.data:
+    form.ccp.choices= [(-1," ")]+[(item.id, item.name) for item in db.session.query(CarCostProfile).filter(CarCostProfile.car_id==car.id)]
+
+    if form.validate() and form.name.data and form.start.data and form.end.data and form.kmssth.data and form.ccp.data != -1:
         event.name = form.name.data
         event.start = form.start.data
         event.end = form.end.data
         event.kmssth = form.kmssth.data
-        event.kmssact = form.kmssact.data
+        event.ccp_id = form.ccp.data
         db.session.commit()
         flash('Event successfully updated', 'success')
         return redirect(url_for('events.event_detail', event_id=event_id))
@@ -75,29 +80,7 @@ def event_detail(event_id):
         form.start.data = event.start
         form.end.data = event.end
         form.kmssth.data = event.kmssth
-        form.kmssact.data = event.kmssact
+        form.ccp.data = event.ccp_id
     return render_template('event.html', event=event, form=form, legend='Update Event', car=car)
 
-@events.route("/event/<int:event_id>", methods=['GET','POST'])
-@login_required
-def add_car_to_event(event_id):
-    event = Event.query.get_or_404(event_id)
-    if event.user_id != current_user.id:
-        abort(403)
 
-    form = AddCarForm()
-
-    form.car.choices= [(-1," ")]+[(item.id, item.brand) for item in db.session.query(Car).filter(Car.user_id==current_user.id)]
-    form.team.choices= [(-1," ")]+[(item.id, item.name) for item in db.session.query(Team).filter(Team.user_id==current_user.id)]
-
-    if form.validate_on_submit() and form.car.data != -1:
-        if form.team.data != -1:
-            new_activity = Activity(user_id=current_user.id, event_id=event_id, car=form.car.data, team_id=form.team.data)
-        else:
-            new_activity = Activity(user_id=current_user.id, event_id=event_id, car=form.car.data)
-        db.session.add(new_activity)
-        db.session.commit()
-        flash('Car assigned, new activity successfully added', 'success')
-        return redirect(url_for('events.event_detail', event_id=event_id))
-
-    return render_template('addcartoevent.html', event=event, form=form)

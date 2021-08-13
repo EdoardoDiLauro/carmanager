@@ -91,6 +91,7 @@ class Event(db.Model):
     kmssact = db.Column(db.Integer, nullable=True)
     ccp_id = db.Column(db.Integer, db.ForeignKey('CarCostProfile.id'), nullable=False)
     car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
@@ -100,6 +101,7 @@ class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     type = db.Column(db.String(20), nullable=False)
+    kmssact = db.Column(db.Integer, nullable=True)
     acp_id = db.Column(db.Integer, db.ForeignKey('ActivityCostProfile.id'), nullable=False)
     car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
@@ -123,7 +125,6 @@ class ActivityCostDriver(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     value = db.Column(db.Integer, nullable=False)
-    interval = db.Column(db.Float, nullable=False)
     acp = db.relationship('ActivityCostProfile', secondary=linksacd, backref='acps', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -156,7 +157,7 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     address = db.Column(db.String(200), nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    notes = db.Column(db.String(200), nullable=True)
 
     def __repr__(self):
         return "Customer ('{self.id}')"

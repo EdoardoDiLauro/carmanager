@@ -35,6 +35,10 @@ def create_app(config_class=Config):
     from blog.activities.routes import activities
     from blog.ccp.routes import ccp
     from blog.ccd.routes import ccd
+    from blog.acp.routes import acp
+    from blog.customers.routes import customers
+
+
 
 
 
@@ -50,6 +54,8 @@ def create_app(config_class=Config):
     app.register_blueprint(activities)
     app.register_blueprint(ccp)
     app.register_blueprint(ccd)
+    app.register_blueprint(acp)
+    app.register_blueprint(customers)
 
 
 
