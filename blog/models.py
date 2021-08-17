@@ -158,6 +158,7 @@ class Customer(db.Model):
     name = db.Column(db.String(200), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return "Customer ('{self.id}')"

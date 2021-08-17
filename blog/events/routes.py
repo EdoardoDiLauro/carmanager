@@ -2,7 +2,7 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from blog import db
-from blog.models import Event, Car, Activity, CarCostProfile
+from blog.models import Event, Car, Activity, CarCostProfile, Customer
 from blog.events.forms import EventForm, UpdateEventForm
 from datetime import datetime, time
 
@@ -22,6 +22,7 @@ def create_event(car_id):
     form = EventForm()
 
     form.ccp.choices= [(-1," ")]+[(item.id, item.name) for item in db.session.query(CarCostProfile).filter(CarCostProfile.car_id==car.id)]
+
 
     if form.validate_on_submit() and form.ccp.data != -1:
         new_event = Event(name=form.name.data, kmssth =form.kmssth.data, kmssact=form.kmssth.data, ccp_id=form.ccp.data,
@@ -65,7 +66,8 @@ def event_detail(event_id):
     form = UpdateEventForm()
 
     form.ccp.choices= [(-1," ")]+[(item.id, item.name) for item in db.session.query(CarCostProfile).filter(CarCostProfile.car_id==car.id)]
-
+    form.customer.choices = [(-1, " ")] + [(item.id, item.name) for item in
+                                      db.session.query(Customer).filter(Customer.user_id == current_user.id)]
     if form.validate() and form.name.data and form.start.data and form.end.data and form.kmssth.data and form.ccp.data != -1:
         event.name = form.name.data
         event.start = form.start.data
@@ -75,12 +77,23 @@ def event_detail(event_id):
         db.session.commit()
         flash('Event successfully updated', 'success')
         return redirect(url_for('events.event_detail', event_id=event_id))
+    if form.validate() and form.name.data and form.start.data and form.end.data and form.kmssth.data and form.ccp.data != -1 and form.customer.data != -1 :
+        event.name = form.name.data
+        event.start = form.start.data
+        event.end = form.end.data
+        event.kmssth = form.kmssth.data
+        event.ccp_id = form.ccp.data
+        event.customer_id = form.customer.data
+        db.session.commit()
+        flash('Event successfully updated', 'success')
+        return redirect(url_for('events.event_detail', event_id=event_id))
     elif request.method == 'GET':
         form.name.data = event.name
         form.start.data = event.start
         form.end.data = event.end
         form.kmssth.data = event.kmssth
         form.ccp.data = event.ccp_id
+        form.customer.data = event.customer_id
     return render_template('event.html', event=event, form=form, legend='Update Event', car=car)
 
 

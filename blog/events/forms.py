@@ -24,5 +24,6 @@ class UpdateEventForm (FlaskForm) :
     name = StringField('Name')
     kmssth = IntegerField('Forecasted SS Kms', validators=[Optional()])
     ccp = SelectField(u'Car Cost Profile', coerce=int, validators=[Optional()])
+    customer = SelectField(u'Customer', coerce=int, validators=[Optional()])
     submit = SubmitField('Update Event')
 
