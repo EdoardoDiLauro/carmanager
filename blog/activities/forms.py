@@ -5,28 +5,21 @@ from wtforms import StringField, SubmitField, TextAreaField, RadioField, SelectF
 from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Optional
 
-class CdForm (FlaskForm) :
+class ActForm (FlaskForm) :
+    start = DateField('Activity Start',
+                      validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    end = DateField('Activity End',
+                    validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
     name = StringField('Name',
-                        validators=[DataRequired()])
-    qty = IntegerField('Quantity (if Cost Driver is NOT distance based)',
-                       validators=[Optional()])
-    uncost = DecimalField('Unit/Km Cost',
                        validators=[DataRequired()])
-    type = SelectField(u'Type', coerce=int, validators=[Optional()])
+    type = StringField('Type',
+                       validators=[DataRequired()])
+    kmssact = IntegerField('Activity SS Kms', validators=[Optional()])
 
-    submit = SubmitField('Add Cost Driver')
+    acp = SelectField(u'Activity Cost Profile', coerce=int, validators=[Optional()])
 
-class RaceSponsorForm (FlaskForm) :
-    sponsor = StringField('Race Sponsor Name',
-                       validators=[Optional()])
-    amount = IntegerField('Race Sponsor Value',
-                       validators=[Optional()])
+    submit = SubmitField('Add New Activity')
 
-    submit = SubmitField('Add Race Sponsor')
 
-class SponsorForm (FlaskForm) :
-    sponsor = SelectField(u'Season Sponsor', coerce=int, validators=[Optional()])
-
-    submit = SubmitField('Bind to Season Sponsor')
 
 

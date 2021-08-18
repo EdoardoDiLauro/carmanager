@@ -2,61 +2,34 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
 from flask_login import current_user, login_required
 from blog import db
-from blog.models import Event, Car, Activity
-from blog.activities.forms import CdForm, SponsorForm, RaceSponsorForm
+from blog.models import Event, Car, Activity, ActivityCostProfile
+from blog.activities.forms import ActForm
 from datetime import datetime, time
 
 activities = Blueprint('activities', __name__)
 
 
-@activities.route("/activity/<int:activity_id>", methods=['GET','POST'])
+@activities.route("/activity/<int:event_id>", methods=['GET','POST'])
 @login_required
-def activity_detail(activity_id):
-    activity = Activity.query.get_or_404(activity_id)
-    if activity.user_id != current_user.id:
+def add_act(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.user_id != current_user.id:
         abort(403)
 
-    event = Event.query.get_or_404(activity.event_id)
-    car = Car.query.get_or_404(activity.car)
-    cds = Cd.query.filter_by(act_id=activity_id, user_id=current_user.id)
-    programsponsors = ProgramSponsorship.query.filter_by(user_id=current_user.id).filter(ProgramSponsorship.sponsored.any(id==activity_id))
+    car = Car.query.get_or_404(event.car_id)
+    if car.user_id != current_user.id:
+        abort(403)
 
-    sponsorform = SponsorForm()
-    racesponsorform = RaceSponsorForm()
-    form = CdForm()
+    form = ActForm()
 
-    sponsorform.sponsor.choices = [(sp.id, sp.name) for sp in db.session.query(ProgramSponsorship).filter(Team.user_id==current_user.id & ProgramSponsorship.sponsored.any(id!=activity_id))]
+    form.acp.choices = [(-1, " ")] + [(item.id, item.name) for item in
+                                      db.session.query(ActivityCostProfile).filter(ActivityCostProfile.user_id == current_user.id)]
 
-    form.type.choices = [(item.id, item.name) for item in db.session.query(Cdtype).filter(Cdtype.user_id == current_user.id)]
-
-    if form.validate_on_submit():
-        cdtype = Cdtype.query.get_or_404(form.type.data)
-        if cdtype.isperkm == True:
-            totcost = form.uncost.data * event.kmss
-            cd = Cd(name=form.name.data, uncost = form.uncost.data, totcost=totcost, qty=1, user_id=current_user.id, event_id=event.id, type_id= cdtype.id )
-        elif cdtype.isperkm == False:
-            totcost = form.uncost.data * form.qty.data
-            cd = Cd(name=form.name.data, uncost=form.uncost.data, totcost=totcost, qty=1, user_id=current_user.id,
-                    event_id=event.id, type_id=cdtype.id)
-        db.session.add(cd)
+    if form.validate_on_submit() and form.acp.data != -1:
+        new_act = Activity(name=form.name.data, type =form.type.data, kmssact=form.kmssth.data, acp_id=form.acp.data,
+                          start=form.start.data,end=form.end.data, car_id=car.id, user_id=current_user.id, event_id=event.id)
+        db.session.add(new_event)
         db.session.commit()
-        flash('New Cost Driver successfully added', 'success')
-        return redirect(url_for('activities.activity_detail', activity_id=activity_id))
-
-    if sponsorform.validate_on_submit():
-        sponsor = ProgramSponsorship.query.get_or_404(sponsorform.sponsor.data)
-        db.session.commit()
-        flash('Race successfully binded to Program Sponsor', 'success')
-        return redirect(url_for('activities.activity_detail', activity_id=activity_id))
-
-    if racesponsorform.validate_on_submit():
-        new_sponsor = RaceSponsorship(user_id=current_user.id)
-        db.session.add(new_sponsor)
-        db.session.commit()
-        flash('New Race Sponsor successfully added', 'success')
-        return redirect(url_for('activities.activity_detail', activity_id=activity_id))
-
-
-
-
-    return render_template('activity.html', activity=activity, event=event, car=car, cds=cds, form=form, sponsors=programsponsors, sf=sponsorform, rf=racesponsorform)
+        flash('New activity successfully added', 'success')
+        return redirect(url_for('events.event_detail', event_id=event_id))
+    return render_template('add_act.html', title='Add Activity', form=form, legend='Add Activity', car=car, event=event)
