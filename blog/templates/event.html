@@ -4,7 +4,16 @@
 <div class="card">
               <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('activities.add_act', event_id=event.id) }}">Add Activity</a>
      </div>
-
+{% for act in acts %}
+<article class="media content-section">
+          <div class="media-body">
+             <h3><a class="mr-2" href="{{ url_for('activities.detail', act_id=act.id)>{{ act.name }} </a></h3>
+             <h4><a>Start: {{act.start.strftime(format='%Y-%m-%d %H:%M')}}  End: {{act.end.strftime(format='%Y-%m-%d %H:%M')}} </a></h4>
+             <div class="card">
+                 <a class="btn btn-danger btn-sm m-1" href="{{ url_for('events.remove_act', activity_id=act.id, event_id=event.id) }}">Delete</a>
+             </div>
+          </div>
+{% endfor %}
 {% endblock content %}
 {% block feed %}
  <div class="content-section">

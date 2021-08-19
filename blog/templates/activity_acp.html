@@ -1,6 +1,42 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ acpform.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ acpform.name.label(class="form-control-label") }}
+                {% if acpform.name.errors %}
+                    {{ acpform.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in acpform.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ acpform.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ acpform.notes.label(class="form-control-label") }}
+                {% if acpform.notes.errors %}
+                    {{ acpform.notes(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in acpform.notes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ acpform.notes(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ acpform.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
 {% endblock content %}
 {% block feed %}
 <div class="content-section">
@@ -12,7 +48,7 @@
     <a class="nav-link" href="{{ url_for('groups.update_group', group_id=group.id) }}">Restore Cost Driver</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('activities.alter_acp', group_id=group.id) }}">Activity Cost Profile</a>
+    <a class="nav-link active" href="{{ url_for('activities.alter_acp', act_id=act.id) }}">Activity Cost Profile</a>
   </li>
     </ul>
 </div>

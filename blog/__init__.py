@@ -37,6 +37,8 @@ def create_app(config_class=Config):
     from blog.ccd.routes import ccd
     from blog.acp.routes import acp
     from blog.customers.routes import customers
+    from blog.spares.routes import spares
+
 
 
 
@@ -56,6 +58,8 @@ def create_app(config_class=Config):
     app.register_blueprint(ccd)
     app.register_blueprint(acp)
     app.register_blueprint(customers)
+    app.register_blueprint(spares)
+
 
 
 

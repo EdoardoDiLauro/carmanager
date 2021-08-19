@@ -17,9 +17,25 @@ class ActForm (FlaskForm) :
     kmssact = IntegerField('Activity SS Kms', validators=[Optional()])
 
     acp = SelectField(u'Activity Cost Profile', coerce=int, validators=[Optional()])
+    notes = TextAreaField('Notes')
 
     submit = SubmitField('Add New Activity')
 
+class UpdateActForm (FlaskForm) :
+    start = DateField('Activity Start',
+                      validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    end = DateField('Activity End',
+                    validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    name = StringField('Name',
+                       validators=[DataRequired()])
+    type = StringField('Type',
+                       validators=[DataRequired()])
+    kmssact = IntegerField('Activity SS Kms', validators=[Optional()])
+
+    acp = SelectField(u'Activity Cost Profile', coerce=int, validators=[Optional()])
+    notes = TextAreaField('Notes')
+
+    submit = SubmitField('Update Activity')
 
 
 

@@ -36,6 +36,10 @@ def create_event(car_id):
 @events.route("/event/overview", methods=['GET', 'POST'])
 @login_required
 def overview():
+    if not current_user.is_authenticated:
+        flash('Please log in to access current page', 'danger')
+        return redirect(url_for('main.home'))
+
     ps = Event.query.filter_by(user_id=current_user.id).order_by()
 
     return render_template('event_overview.html', eventlist=ps)
@@ -44,6 +48,10 @@ def overview():
 @events.route("/event/<int:event_id>/delete", methods=['GET','POST'])
 @login_required
 def delete_event(event_id):
+    if not current_user.is_authenticated:
+        flash('Please log in to access current page', 'danger')
+        return redirect(url_for('main.home'))
+
     event = Event.query.get_or_404(event_id)
     if event.user_id != current_user.id:
         abort(403)
@@ -55,6 +63,10 @@ def delete_event(event_id):
 @events.route("/event/<int:event_id>", methods=['GET','POST'])
 @login_required
 def event_detail(event_id):
+    if not current_user.is_authenticated:
+        flash('Please log in to access current page', 'danger')
+        return redirect(url_for('main.home'))
+
     event = Event.query.get_or_404(event_id)
     if event.user_id != current_user.id:
         abort(403)
@@ -62,6 +74,8 @@ def event_detail(event_id):
     car = Car.query.get_or_404(event.car_id)
     if car.user_id != current_user.id:
         abort(403)
+
+    acts = Activity.query.filter(Activity.event_id==event_id).order_by(Activity.start)
 
     form = UpdateEventForm()
 
@@ -94,6 +108,6 @@ def event_detail(event_id):
         form.kmssth.data = event.kmssth
         form.ccp.data = event.ccp_id
         form.customer.data = event.customer_id
-    return render_template('event.html', event=event, form=form, legend='Update Event', car=car)
+    return render_template('event.html', event=event, form=form, legend='Update Event', car=car, acts=acts)
 
 

@@ -75,6 +75,8 @@ class CarCostDriverReset(db.Model):
     value = db.Column(db.Integer, nullable=False)
     elapsed = db.Column(db.Float, nullable=False)
     limit = db.Column(db.Integer, nullable=False)
+    resdate = db.Column(db.DateTime, nullable=False)
+    notes = db.Column(db.String(200), nullable=True)
     activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=False)
     ccd_id = db.Column(db.Integer, db.ForeignKey('CarCostDriver.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -104,6 +106,7 @@ class Activity(db.Model):
     start = db.Column(db.DateTime, nullable=False)
     end = db.Column(db.DateTime, nullable=False)
     kmssact = db.Column(db.Integer, nullable=True)
+    notes = db.Column(db.String(200), nullable=True)
     acp_id = db.Column(db.Integer, db.ForeignKey('ActivityCostProfile.id'), nullable=False)
     car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
@@ -117,6 +120,7 @@ class ActivityCostProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
+    acd = db.relationship('ActivityCostDriver', secondary=linksacd, backref='drivers', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
@@ -139,8 +143,9 @@ class Spare(db.Model):
     name = db.Column(db.String(30), nullable=False)
     isnew = db.Column(db.Boolean, default=True)
     price = db.Column(db.Float, nullable=True)
-    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'), nullable=False)
-    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=False)
+    notes = db.Column(db.String(200), nullable=True)
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'), nullable=True)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
@@ -150,6 +155,8 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(200), nullable=False)
     regdate = db.Column(db.DateTime, nullable=False)
+    totprice = db.Column(db.Float, nullable=True)
+    notes = db.Column(db.String(200), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
