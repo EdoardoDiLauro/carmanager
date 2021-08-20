@@ -36,6 +36,25 @@
             {{ acpform.submit(class="btn btn-outline-info") }}
         </div>
     </form>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ dashform.hidden_tag() }}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Value</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+        {% for acd in dashform.cds %}
+        <tr class="table-active">
+            <th scope="row">{{acd.cdid}}{{acd.name(readonly=False)}}</th>
+            <th scope="row">{{acd.value(readonly=False)}}</th>
+            <th scope="row">{{acd.notes(readonly=False)}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+        </form>
 </div>
 {% endblock content %}
 {% block feed %}
