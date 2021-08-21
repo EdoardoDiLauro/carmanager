@@ -21,10 +21,10 @@ def create_spare():
         if form.isnew.data == 1:
             if form.notes.data : new_spare = Spare(name=form.name.data, notes=form.notes.data, area=form.area.data, isnew=True,
                               price=form.price.data,
-                              user_id=current_user.id)
+                              user_id=current_user.id,activity_id=0)
             else: new_spare = Spare(name=form.name.data, area=form.area.data, isnew=True,
                               price=form.price.data,
-                              user_id=current_user.id)
+                              user_id=current_user.id, activity_id=0)
             db.session.add(new_spare)
             db.session.commit()
             flash('New spare part successfully added', 'success')
@@ -33,11 +33,11 @@ def create_spare():
             if form.notes.data:
                 new_spare = Spare(name=form.name.data, notes=form.notes.data, area=form.area.data, isnew=False,
                                   price=form.price.data,
-                                  user_id=current_user.id)
+                                  user_id=current_user.id, activity_id=0)
             else:
                 new_spare = Spare(name=form.name.data, area=form.area.data, isnew=False,
                                   price=form.price.data,
-                                  user_id=current_user.id)
+                                  user_id=current_user.id, activity_id=0)
             db.session.add(new_spare)
             db.session.commit()
             flash('New spare part successfully added', 'success')

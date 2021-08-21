@@ -47,7 +47,7 @@
         </tr>
       </thead>
         {% for acd in dashform.cds %}
-        <tr class="table-active">
+        <tr href="#">
             <th scope="row">{{acd.cdid}}{{acd.name(readonly=False)}}</th>
             <th scope="row">{{acd.value(readonly=False)}}</th>
             <th scope="row">{{acd.notes(readonly=False)}}</th>
@@ -61,10 +61,10 @@
 <div class="content-section">
     <ul class="nav flex-column nav-pills nav-fill">
   <li class="nav-item">
-    <a class="nav-link" href="#">Use Spare Parts</a>
+    <a class="nav-link" href="{{ url_for('activities.use_spare', act_id=act.id) }}">Use Spare Parts</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('groups.update_group', group_id=group.id) }}">Restore Cost Driver</a>
+    <a class="nav-link" href="{{ url_for('activities.res_cd', act_id=act.id) }}">Restore Cost Driver</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="{{ url_for('activities.alter_acp', act_id=act.id) }}">Activity Cost Profile</a>

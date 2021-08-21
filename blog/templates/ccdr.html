@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+                    </fieldset>
+    </form>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ usedspares.hidden_tag() }}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">New Part</th>
+            <th scope="col">Price</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+        {% for sp in usedspares.spares %}
+        <tr class="table-active">
+            <th scope="row">{{sp.spid}}{{sp.name(readonly=True)}}</th>
+            <th scope="row">{{sp.isnew(readonly=True)}}</th>
+            <th scope="row">{{sp.price(readonly=True)}}</th>
+            <th scope="row">{{sp.notes(readonly=True)}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+        </form>
+</div>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ availspares.hidden_tag() }}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Select</th>
+            <th scope="col">Name</th>
+            <th scope="col">New Part</th>
+            <th scope="col">Price</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+        {% for sp in availspares.spares %}
+        <tr class="table-active">
+            <th scope="row">
+            {% for subfield in sp.select %}
+                {% if loop.index == 1 %}
+                {{ subfield.label }}
+                {{ subfield }}
+                {% endif %}
+            {% endfor %}
+            </th>
+            <th scope="row">{{sp.spid}}{{sp.name(readonly=True)}}</th>
+            <th scope="row">{{sp.isnew(readonly=True)}}</th>
+            <th scope="row">{{sp.price(readonly=True)}}</th>
+            <th scope="row">{{sp.notes(readonly=True)}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+        <div class="form-group">
+            {{ availspares.submitres(class="btn btn-outline-info") }}
+        </div>
+        </form>
+</div>
+{% endblock content %}
+{% block feed %}
+{% endblock feed %}

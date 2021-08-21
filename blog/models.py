@@ -48,6 +48,7 @@ class CarCostProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     notes = db.Column(db.String(200), nullable=True)
+    ccd = db.relationship('CarCostDriver', secondary=linksccd, backref='drivers', lazy=True)
     car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -72,6 +73,7 @@ class CarCostDriverReset(db.Model):
     __tablename__ = 'CarCostDriverReset'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
+    idres = db.Column(db.Integer, nullable=False)
     value = db.Column(db.Integer, nullable=False)
     elapsed = db.Column(db.Float, nullable=False)
     limit = db.Column(db.Integer, nullable=False)

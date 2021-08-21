@@ -1,12 +1,81 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ usedspares.hidden_tag() }}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Select</th>
+            <th scope="col">Name</th>
+            <th scope="col">New Part</th>
+            <th scope="col">Price</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+        {% for sp in usedspares.spares %}
+        <tr class="table-active">
+            <th scope="row">
+            {% for subfield in sp.select %}
+                {% if loop.index == 1 %}
+                {{ subfield.label }}
+                {{ subfield }}
+                {% endif %}
+            {% endfor %}
+            </th>
+            <th scope="row">{{sp.spid}}{{sp.name(readonly=True)}}</th>
+            <th scope="row">{{sp.isnew(readonly=True)}}</th>
+            <th scope="row">{{sp.price(readonly=True)}}</th>
+            <th scope="row">{{sp.notes(readonly=True)}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+        <div class="form-group">
+            {{ usedspares.submitoff(class="btn btn-outline-info") }}
+        </div>
+        </form>
+</div>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ availspares.hidden_tag() }}
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Select</th>
+            <th scope="col">Name</th>
+            <th scope="col">New Part</th>
+            <th scope="col">Price</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+        {% for sp in availspares.spares %}
+        <tr href="#">
+            <th scope="row">
+            {% for subfield in sp.select %}
+                {% if loop.index == 1 %}
+                {{ subfield.label }}
+                {{ subfield }}
+                {% endif %}
+            {% endfor %}
+            </th>
+            <th scope="row">{{sp.spid}}{{sp.name(readonly=True)}}</th>
+            <th scope="row">{{sp.isnew(readonly=True)}}</th>
+            <th scope="row">{{sp.price(readonly=True)}}</th>
+            <th scope="row">{{sp.notes(readonly=True)}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+        <div class="form-group">
+            {{ availspares.submit(class="btn btn-outline-info") }}
+        </div>
+        </form>
+</div>
 {% endblock content %}
 {% block feed %}
 <div class="content-section">
     <ul class="nav flex-column nav-pills nav-fill">
   <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('activities.use_spare', act_id=act.id) }}">Use Spare Parts</a>
+    <a class="nav-link active" href="{{ url_for('activities.use_spare', act_id=act.id) }}">Use Spare Parts</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{{ url_for('activities.res_cd', act_id=act.id) }}">Restore Cost Driver</a>

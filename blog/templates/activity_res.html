@@ -1,6 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
-
+<div class="content-section">
+    <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Value</th>
+            <th scope="col">Elapsed</th>
+          <th scope="col">Limit</th>
+            <th scope="col">Restore</th>
+        </tr>
+      </thead>
+        {% for ccd in ccds %}
+        {% if ccd.elapsed>ccd.limit %}
+        <tr class="table-active">
+            <th scope="row">{{ccd.name(readonly=True)}}</th>
+            <th scope="row">{{ccd.value(readonly=True)}}</th>
+            <th scope="row">{{ccd.elapsed(readonly=True)}}</th>
+            <th scope="row">{{ccd.limit(readonly=True)}}</th>
+            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Add Event</a></th>
+        </tr>
+        {% else %}
+        <tr href="#">
+            <th scope="row">{{ccd.name(readonly=True)}}</th>
+            <th scope="row">{{ccd.value(readonly=True)}}</th>
+            <th scope="row">{{ccd.elapsed(readonly=True)}}</th>
+            <th scope="row">{{ccd.limit(readonly=True)}}</th>
+            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Add Event</a></th>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    </div>
 {% endblock content %}
 {% block feed %}
 <div class="content-section">
@@ -9,7 +40,7 @@
     <a class="nav-link" href="{{ url_for('activities.use_spare', act_id=act.id) }}">Use Spare Parts</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('activities.res_cd', act_id=act.id) }}">Restore Cost Driver</a>
+    <a class="nav-link active" href="{{ url_for('activities.res_cd', act_id=act.id) }}">Restore Cost Driver</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{{ url_for('activities.alter_acp', act_id=act.id) }}">Activity Cost Profile</a>

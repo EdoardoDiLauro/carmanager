@@ -10,7 +10,7 @@ ccd = Blueprint('ccd', __name__)
 
 @ccd.route("/ccd/<int:ccp_id>/<int:car_id>/new" , methods=['GET', 'POST'])
 @login_required
-def create_ccd(car_id):
+def create_ccd(car_id, ccp_id):
     if not current_user.is_authenticated:
         flash('Please log in to access current page', 'danger')
         return redirect(url_for('main.home'))
@@ -19,7 +19,7 @@ def create_ccd(car_id):
     if car.user_id != current_user.id:
         abort(403)
 
-    ccp = CarCostProfile.query.get_or_404(car_id)
+    ccp = CarCostProfile.query.get_or_404(ccp_id)
     if ccp.user_id != current_user.id:
         abort(403)
 
