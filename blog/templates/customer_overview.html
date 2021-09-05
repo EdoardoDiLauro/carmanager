@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Customers</h2>
+{% for customer in customerlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ customer.name }} </a></h3>
+             <h4><a>Address: {{ customer.address }} </a></h4>
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('customers.customer_detail', customer_id=customer.id) }}">Manage</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('customers.delete_customer', customer_id=customer.id) }}">Delete</a>
+         </div>
+              {% for event in customer.events %}
+              <h4><a href="{{ url_for('events.event_detail', event_id=event.id) }}"> {{ event.name }}</a></h4>
+              {% endfor %}
+              <div class="card-header">{{customer.notes}}</div>
+          </div>
+    </article>
+        {% endfor %}
+{% if customerlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No customers added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}

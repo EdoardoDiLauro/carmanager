@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Registered Invoices</h2>
+{% for invoice in invoicelist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ invoice.regdate }} - {{invoice.supplier}} </a></h3>
+                           <h5><a>Price: {{ invoice.totprice }}</a></h5>
+
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('invoices.invoice_detail', invoice_id=invoice.id) }}">Update</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('invoices.delete_invoice', invoice_id=invoice.id) }}">Delete</a>
+             <a class="btn btn-outline-info btn-sm m-1" href="{{ url_for('invoices.uploaded_file', filename=invoice.filename) }}">Show File: {{invoice.filename}}</a>
+              <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('invoices.download_file', filename=invoice.filename, invoice_id=invoice.causale) }}">Download</a>
+                        <div class="card-header">{{invoice.notes}}</div>
+         </div>
+          </div>
+    </article>
+        {% endfor %}
+{% if invoicelist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No invoices registered yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}

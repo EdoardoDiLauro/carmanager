@@ -149,7 +149,7 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
+    color: #dd002a;
     text-decoration: underline
 }
 
@@ -2964,7 +2964,7 @@ a.btn.disabled, fieldset:disabled a.btn {
 }
 
 .btn-link:hover {
-    color: #0056b3;
+    color: #dc3545;
     text-decoration: underline
 }
 
@@ -4050,7 +4050,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
-    background-color: #007bff
+    background-color: #dd002a
 }
 
 .nav-fill .nav-item {
@@ -4799,7 +4799,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 
 .page-link:hover {
     z-index: 2;
-    color: #0056b3;
+    color: #dc3545;
     text-decoration: none;
     background-color: #e9ecef;
     border-color: #dee2e6
@@ -9963,7 +9963,7 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 }
 
 a.text-primary:focus, a.text-primary:hover {
-    color: #0056b3 !important
+    color: #dc3545 !important
 }
 
 .text-secondary {

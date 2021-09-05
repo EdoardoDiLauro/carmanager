@@ -10,27 +10,20 @@ class AcdForm (FlaskForm) :
                         validators=[DataRequired()])
     value = IntegerField('Forecasted Cost',
                          validators=[DataRequired()])
-    notes = TextAreaField('Notes')
-    submit = SubmitField('Add Activity Cost Driver')
+    submitacd = SubmitField('Add Activity Cost Driver')
 
 class UpdateAcdForm (FlaskForm) :
-    name = StringField('Name',
-                        validators=[DataRequired()])
-    value = IntegerField('Forecasted Cost',
-                         validators=[DataRequired()])
-    notes = TextAreaField('Notes')
-    submit = SubmitField('Update Activity Cost Driver')
+    name = StringField('Name')
+    value = IntegerField('Forecasted Cost')
+    submitacdup = SubmitField('Update Activity Cost Driver')
 
 class UpdateAcdFormDash (FlaskForm) :
     cdid = HiddenField()
-    name = StringField('Name',
-                        validators=[DataRequired()])
-    value = IntegerField('Forecasted Cost',
-                         validators=[DataRequired()])
-    notes = TextAreaField('Notes')
+    nome = StringField()
+    value = IntegerField()
 
 class AcdDashForm (Form):
     cds = FieldList(FormField(UpdateAcdFormDash))
-    submit = SubmitField('Update Activity Cost Drivers')
+    submitacddf = SubmitField('Update Activity Cost Drivers')
 
 

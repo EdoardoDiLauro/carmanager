@@ -7,15 +7,22 @@
 {% for act in acts %}
 <article class="media content-section">
           <div class="media-body">
-             <h3><a class="mr-2" href="{{ url_for('activities.detail', act_id=act.id)>{{ act.name }} </a></h3>
+              <h3><a class="mr-2" href=" {{url_for('activities.detail', act_id=act.id)}}">{{ act.name }} - {{act.type}}</a></h3>
              <h4><a>Start: {{act.start.strftime(format='%Y-%m-%d %H:%M')}}  End: {{act.end.strftime(format='%Y-%m-%d %H:%M')}} </a></h4>
+                           <h5><a>SS Length: {{ act.kmssact }} </a></h5>
+              <div class="card-header">{{act.notes}}</div>
              <div class="card">
                  <a class="btn btn-danger btn-sm m-1" href="{{ url_for('events.remove_act', activity_id=act.id, event_id=event.id) }}">Delete</a>
              </div>
           </div>
+</article>
 {% endfor %}
 {% endblock content %}
 {% block feed %}
+<h4>Event Cost: {{ event.totcostact }}</h4>
+<h4>Spares Cost: {{ event.totcostspares }}</h4>
+<h4>Running Cost: {{'%0.2f'|format(event.totcostkm|float)}}</h4>
+<h4>Event Length: {{ event.kmssact }} Km</h4>
  <div class="content-section">
         <form method="post" action="" enctype="multipart/form-data">
           {{ form.hidden_tag() }}

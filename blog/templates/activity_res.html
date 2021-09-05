@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+    <h2>Cost Drivers - {{ car.brand }} {{ car.model }} - {{ ccp.name }} </h2>
 <div class="content-section">
     <table class="table table-hover table-responsive">
       <thead>
@@ -14,19 +15,19 @@
         {% for ccd in ccds %}
         {% if ccd.elapsed>ccd.limit %}
         <tr class="table-active">
-            <th scope="row">{{ccd.name(readonly=True)}}</th>
-            <th scope="row">{{ccd.value(readonly=True)}}</th>
-            <th scope="row">{{ccd.elapsed(readonly=True)}}</th>
-            <th scope="row">{{ccd.limit(readonly=True)}}</th>
-            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Add Event</a></th>
+            <th scope="row">{{ccd.name}}</th>
+            <th scope="row">{{ccd.value}}</th>
+            <th scope="row">{{ccd.elapsed}}</th>
+            <th scope="row">{{ccd.limit}}</th>
+            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Restore</a></th>
         </tr>
         {% else %}
         <tr href="#">
-            <th scope="row">{{ccd.name(readonly=True)}}</th>
-            <th scope="row">{{ccd.value(readonly=True)}}</th>
-            <th scope="row">{{ccd.elapsed(readonly=True)}}</th>
-            <th scope="row">{{ccd.limit(readonly=True)}}</th>
-            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Add Event</a></th>
+            <th scope="row">{{ccd.name}}</th>
+            <th scope="row">{{ccd.value}}</th>
+            <th scope="row">{{ccd.elapsed}}</th>
+            <th scope="row">{{ccd.limit}}</th>
+            <th scope="row"><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccdr.add_ccdr', act_id=act.id, ccd_id=ccd.id) }}">Restore</a></th>
         </tr>
         {% endif %}
         {% endfor %}
@@ -47,6 +48,8 @@
   </li>
     </ul>
 </div>
+<h4>Activity Cost: {{ act.totcostact }}</h4>
+<h4>Spares Cost: {{ act.totcostspares }}</h4>
 <div class="content-section">
     <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -117,7 +120,7 @@
                     {{ form.acp(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acp.create_acp') }}">Create New Activity Cost Profile</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acp.create_acp', event_id=event.id) }}">Create New Activity Cost Profile</a>
             <div class="form-group">
                 {{ form.kmssact.label(class="form-control-label") }}
                 {% if form.kmssact.errors %}

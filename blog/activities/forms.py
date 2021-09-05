@@ -6,9 +6,9 @@ from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Optional
 
 class ActForm (FlaskForm) :
-    start = DateField('Activity Start',
+    start = DateTimeLocalField('Activity Start',
                       validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    end = DateField('Activity End',
+    end = DateTimeLocalField('Activity End',
                     validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
     name = StringField('Name',
                        validators=[DataRequired()])
@@ -22,14 +22,14 @@ class ActForm (FlaskForm) :
     submit = SubmitField('Add New Activity')
 
 class UpdateActForm (FlaskForm) :
-    start = DateField('Activity Start',
-                      validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    end = DateField('Activity End',
-                    validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    name = StringField('Name',
-                       validators=[DataRequired()])
-    type = StringField('Type',
-                       validators=[DataRequired()])
+    start = DateTimeLocalField('Activity Start'
+                       , format='%Y-%m-%dT%H:%M')
+    end = DateTimeLocalField('Activity End'
+                     , format='%Y-%m-%dT%H:%M')
+    name = StringField('Name'
+                        )
+    type = StringField('Type'
+                        )
     kmssact = IntegerField('Activity SS Kms', validators=[Optional()])
 
     acp = SelectField(u'Activity Cost Profile', coerce=int, validators=[Optional()])

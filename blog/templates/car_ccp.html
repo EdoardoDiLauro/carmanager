@@ -3,25 +3,25 @@
     <h2>{{ car.brand }} {{ car.model }} </h2>
     <h4>Chassis: {{ car.chassis }} | Total Kms of SS: {{ car.kmtot }}</h4>
 <div class="card">
-<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.create_event', car_id=car.id) }}">Add Event</a>
+<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccp.create_ccp', car_id=car.id) }}">Create Car Cost Profile</a>
 </div>
-{% for event in eventlist %}
+{% for ccp in ccplist %}
 <article class="media content-section">
           <div class="media-body">
          <div class="article-metadata">
-             <h3><a class="mr-2" href="{{ url_for('events.event_detail', event_id=event.id) }}">{{ event.name }} </a></h3>
-                           <h5><a>{{ event.start.strftime(format='%d-%m-%Y') }} - {{ event.end.strftime(format='%d-%m-%Y') }}</a></h5>
+             <h3><a class="mr-2" href="{{ url_for('ccp.ccp_detail', ccp_id=ccp.id, car_id=car.id) }}">{{ ccp.name }} </a></h3>
+                           <div class="card-header">{{ccp.notes}}</div>
              <div class="card">
-              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('events.delete_event', event_id=event.id) }}">Delete</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('ccp.delete_ccp', ccp_id=ccp.id, car_id=car.id) }}">Delete</a>
              </div>
          </div>
           </div>
     </article>
         {% endfor %}
-{% if eventlist.count()==0 %}
+{% if ccplist.count()==0 %}
 <article class="media content-section">
           <div class="media-body">
-                          <h4><a>No events added yet</a></h4>
+                          <h4><a>No Car Cost Profiles added yet</a></h4>
           </div>
 </article>
 {% endif %}
@@ -30,10 +30,10 @@
 <div class="content-section">
     <ul class="nav flex-column nav-pills nav-fill">
   <li class="nav-item">
-    <a class="nav-link active" href="{{ url_for('cars.car_detail', car_id=car.id) }}">Events</a>
+    <a class="nav-link" href="{{ url_for('cars.car_detail', car_id=car.id) }}">Events</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{{ url_for('cars.car_ccp', car_id=car.id) }}">Cost Profiles</a>
+    <a class="nav-link active" href="{{ url_for('cars.car_ccp', car_id=car.id) }}">Cost Profiles</a>
   </li>
     </ul>
 </div>

@@ -47,6 +47,30 @@
                             <a class="dropdown-item" href="{{ url_for('cars.overview') }}">Overview</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Spares</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('spares.create_spare') }}">Add New</a>
+                            <a class="dropdown-item" href="{{ url_for('spares.overview') }}">Overview</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Invoices</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('invoices.create_invoice') }}">Add New</a>
+                            <a class="dropdown-item" href="{{ url_for('invoices.overview') }}">Overview</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Customers</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('customers.create_customer') }}">Add New</a>
+                            <a class="dropdown-item" href="{{ url_for('customers.overview') }}">Overview</a>
+                        </div>
+                    </li>
                     <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Update Profile</a>
                     <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Log Out</a>
                     {% else %}

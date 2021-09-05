@@ -9,10 +9,9 @@ class AcpForm (FlaskForm) :
     name = StringField('Name',
                         validators=[DataRequired()])
     notes = TextAreaField('Notes')
-    submit = SubmitField('Add Activity Cost Profile')
+    submitacp = SubmitField('Add Activity Cost Profile')
 
 class UpdateAcpForm (FlaskForm) :
-    name = StringField('Name',
-                        validators=[DataRequired()])
+    name = StringField('Name')
     notes = TextAreaField('Notes')
-    submit = SubmitField('Update Activity Cost Profile')
+    submitacpup = SubmitField('Update Activity Cost Profile')

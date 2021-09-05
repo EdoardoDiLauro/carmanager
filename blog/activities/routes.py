@@ -35,7 +35,7 @@ def add_act(event_id):
                                       db.session.query(ActivityCostProfile).filter(ActivityCostProfile.user_id == current_user.id)]
 
     if form.validate_on_submit() and form.acp.data != -1:
-        if form.notes.data: new_act = Activity(name=form.name.data, notes=form.notes.data, type =form.type.data, kmssact=form.kmssth.data, acp_id=form.acp.data,
+        if form.notes.data: new_act = Activity(name=form.name.data, notes=form.notes.data, type =form.type.data, kmssact=form.kmssact.data, acp_id=form.acp.data,
                           start=form.start.data,end=form.end.data, car_id=car.id, user_id=current_user.id, event_id=event.id)
         else: new_act = Activity(name=form.name.data, type =form.type.data, kmssact=form.kmssth.data, acp_id=form.acp.data,
                           start=form.start.data,end=form.end.data, car_id=car.id, user_id=current_user.id, event_id=event.id)
@@ -46,7 +46,7 @@ def add_act(event_id):
     return render_template('add_act.html', title='Add Activity', form=form, legend='Add Activity', car=car, event=event)
 
 
-@activities.route("/activity/<int:act_id>", methods=['GET','POST'])
+@activities.route("/activity/<int:act_id>/detail", methods=['GET','POST'])
 @login_required
 def detail(act_id):
     if not current_user.is_authenticated:
@@ -97,7 +97,7 @@ def detail(act_id):
         form.start.data = act.start
         form.end.data = act.end
         form.type.data = act.type
-        form.kmssact.data = act.kmssth
+        form.kmssact.data = act.kmssact
         form.acp.data = act.acp_id
         form.notes.data = act.notes
     return render_template('activity.html', act=act, event=event, form=form, legend='Update Activity', car=car)
@@ -122,7 +122,7 @@ def alter_acp(act_id):
         abort(403)
 
     acp = ActivityCostProfile.query.get_or_404(act.acp_id)
-    if car.user_id != current_user.id:
+    if acp.user_id != current_user.id:
         abort(403)
 
     form = UpdateActForm()
@@ -134,29 +134,26 @@ def alter_acp(act_id):
                                       db.session.query(ActivityCostProfile).filter(
                                           ActivityCostProfile.user_id == current_user.id)]
 
-    cds = acp.drivers.all()
+    cds = ActivityCostDriver.query.filter(ActivityCostDriver.acp.any(id=acp.id))
 
     for cd in cds:
         cd_form = UpdateAcdFormDash()
         cd_form.cdid = cd.id
-        cd_form.name =cd.name
+        cd_form.nome = cd.name
         cd_form.value = cd.value
-        cd_form.notes = cd.notes
         dashform.cds.append_entry(cd_form)
 
-    if dashform.submit.data:
+    if dashform.submitacddf.data:
         for data in dashform.cds.entries:
             cdmod = ActivityCostDriver.query.filter_by(id=data.cdid.data).first()
-            cdmod.name = data.name.data
+            cdmod.name = data.nome.data
             cdmod.value = data.value.data
-            cdmod.notes = data.notes.data
             db.session.commit()
         flash('Activity Cost Drivers successfully updated', 'success')
         return redirect(url_for('activities.alter_acp', act_id=act_id))
         
     if newacdform.validate_on_submit():
-        if newacdform.notes.data : new_acd = ActivityCostDriver(name=newacdform.name.data, value=newacdform.value.data, notes=newacdform.notes.data, user_id=current_user.id)
-        else:new_acd = ActivityCostDriver(name=newacdform.name.data, value=newacdform.value.data, user_id=current_user.id)
+        new_acd = ActivityCostDriver(name=newacdform.name.data, value=newacdform.value.data, user_id=current_user.id)
         new_acd.acp.append(acp)
         db.session.add(new_acd)
         db.session.commit()
@@ -164,18 +161,16 @@ def alter_acp(act_id):
         return redirect(url_for('activities.alter_acp', act_id=act_id))
 
 
-    if acpform.validate() and acpform.name.data:
-        acp.name = acpform.name.data
+    if acpform.validate_on_submit():
+        if acpform.name.data: acp.name = acpform.name.data
         if acpform.notes.data: act.notes = form.notes.data
         db.session.commit()
         flash('Activity Cost Profile successfully updated', 'success')
         return redirect(url_for('activities.alter_acp', act_id=act_id))
-    elif acp and request.method == 'GET':
+
+    if acp and request.method == 'GET':
         acpform.name.data = acp.name
         acpform.notes.data = acp.notes
-
-
-
 
     if form.validate() and form.name.data and form.start.data and form.end.data and form.type.data and form.kmssact.data and form.acp.data != -1:
         act.name = form.name.data
@@ -203,10 +198,10 @@ def alter_acp(act_id):
         form.start.data = act.start
         form.end.data = act.end
         form.type.data = act.type
-        form.kmssact.data = act.kmssth
+        form.kmssact.data = act.kmssact
         form.acp.data = act.acp_id
         form.notes.data = act.notes
-    return render_template('activity_acp.html', act=act, event=event, form=form, dashform=dashform, legend='Update Activity', car=car)
+    return render_template('activity_acp.html', act=act, event=event, acpform=acpform, form=form, dashform=dashform,newacdform=newacdform, title='Update Activity', car=car, acp=acp)
 
 @activities.route("/activity/<int:act_id>/spare", methods=['GET','POST'])
 @login_required
@@ -228,14 +223,17 @@ def use_spare(act_id):
         abort(403)
 
     usedspares = db.session.query(Spare).filter(
-                                          Spare.activity_id == act_id, user_id=current_user.id)
+                                          Spare.activity_id == act_id, Spare.user_id==current_user.id)
 
     availablespares = db.session.query(Spare).filter(
-                                          Spare.activity_id == 0, user_id=current_user.id)
+                                          Spare.activity_id == 0, Spare.user_id==current_user.id)
 
     form = UpdateActForm()
     availdashform = SpareDashForm()
     useddashform = SpareDashForm()
+
+    act.totcostspares = 0
+    db.session.commit()
 
     form.acp.choices = [(-1, " ")] + [(item.id, item.name) for item in
                                       db.session.query(ActivityCostProfile).filter(
@@ -244,7 +242,7 @@ def use_spare(act_id):
     for sp in availablespares:
         sp_form = SpareFormDash()
         sp_form.spid = sp.id
-        sp_form.name =sp.name
+        sp_form.nome =sp.name
         sp_form.isnew = sp.isnew
         sp_form.price = sp.price
         sp_form.notes = sp.notes
@@ -253,14 +251,16 @@ def use_spare(act_id):
     for sp in usedspares:
         sp_form = SpareFormDash()
         sp_form.spid = sp.id
-        sp_form.name =sp.name
+        sp_form.nome =sp.name
         sp_form.isnew = sp.isnew
         sp_form.price = sp.price
         sp_form.notes = sp.notes
         useddashform.sps.append_entry(sp_form)
+        act.totcostspares = act.totcostspares + sp.price
+        db.session.commit()
 
     if availdashform.submit.data:
-        for data in availdashform.spares.entries:
+        for data in availdashform.sps.entries:
             if data.select.data == 1:
                 spmod = Spare.query.filter_by(id=data.spid.data).first()
                 spmod.activity_id = act_id
@@ -269,7 +269,7 @@ def use_spare(act_id):
         return redirect(url_for('activities.use_spare', act_id=act_id))
 
     if useddashform.submitoff.data:
-        for data in useddashform.spares.entries:
+        for data in useddashform.sps.entries:
             if data.select.data == 1:
                 spmod = Spare.query.filter_by(id=data.spid.data).first()
                 spmod.activity_id = 0
@@ -303,7 +303,7 @@ def use_spare(act_id):
         form.start.data = act.start
         form.end.data = act.end
         form.type.data = act.type
-        form.kmssact.data = act.kmssth
+        form.kmssact.data = act.kmssact
         form.acp.data = act.acp_id
         form.notes.data = act.notes
     return render_template('activity_spare.html', act=act, event=event, form=form, availspares=availdashform, usedspares=useddashform, legend='Update Activity', car=car)
@@ -331,20 +331,25 @@ def res_cd(act_id):
     if ccp.user_id != current_user.id:
         abort(403)
 
-    ccds = ccp.drivers.all()
+    ccds = CarCostDriver.query.filter(CarCostDriver.ccp.any(id=ccp.id))
 
     for ccd in ccds:
-        lastres = CarCostDriverReset.query.filter_by(CarCostDriverReset.idres==ccd.id).order_by(desc(CarCostDriverReset.resdate)).first()
+        lastres = CarCostDriverReset.query.filter_by(idres=ccd.id).order_by(desc(CarCostDriverReset.resdate)).first()
         elapsed = 0
-        elacts = db.session.query(Activity).filter(
-                                          Activity.user_id == current_user.id).filter(Activity.start>lastres.resdate).filter(Activity.car_id==car.id)
+        if lastres: elacts = db.session.query(Activity).filter(Activity.user_id == current_user.id).filter(Activity.start>lastres.resdate).filter(Activity.end<=act.end).filter(Activity.car_id==car.id)
+        else: elacts = db.session.query(Activity).filter(Activity.end<=act.end).filter(Activity.user_id == current_user.id).filter(Activity.car_id==car.id)
+
         for activity in elacts:
             ev = Event.query.get_or_404(activity.event_id)
             cp = CarCostProfile.query.get_or_404(ev.ccp_id)
-            if ccd in cp.drivers.all():
+            if ccd in cp.ccd:
                 elapsed = elapsed + activity.kmssact
 
-        ccd.elapsed = elapsed
+        if lastres:
+            ccd.elapsed = elapsed
+            if lastres.activity_id == act_id: ccd.elapsed = 0
+        else: ccd.elapsed = elapsed + ccd.initial
+        db.session.commit()
 
     form = UpdateActForm()
 
@@ -378,8 +383,39 @@ def res_cd(act_id):
         form.start.data = act.start
         form.end.data = act.end
         form.type.data = act.type
-        form.kmssact.data = act.kmssth
+        form.kmssact.data = act.kmssact
         form.acp.data = act.acp_id
         form.notes.data = act.notes
 
     return render_template('activity_res.html', act=act, event=event, ccp=ccp, form=form, ccds=ccds, legend='Restore Car Cost Drivers', car=car)
+
+
+@activities.route("/activity/<int:act_id>/totcalc", methods=['GET','POST'])
+@login_required
+def calc_totcostact(act_id):
+    if not current_user.is_authenticated:
+        flash('Please log in to access current page', 'danger')
+        return redirect(url_for('main.home'))
+
+    act = Activity.query.get_or_404(act_id)
+    if act.user_id != current_user.id:
+        abort(403)
+
+    acp = ActivityCostProfile.query.get_or_404(act.acp_id)
+    if acp.user_id != current_user.id:
+        abort(403)
+
+    cds = ActivityCostDriver.query.filter(ActivityCostDriver.acp.any(id=acp.id))
+
+
+    act.totcostact = 0
+    db.session.commit()
+
+    for acd in cds:
+        act.totcostact = act.totcostact + acd.value
+        db.session.commit()
+
+    flash('Activity total cost successfully updated', 'success')
+    return redirect(url_for('activities.alter_acp', act_id=act_id))
+
+

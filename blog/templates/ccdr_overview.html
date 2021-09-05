@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Restores - {{ car.brand }} {{ car.model }} - {{ ccp.name }} </h2>
+    <h4>Chassis: {{ car.chassis }} | Total Kms of SS: {{ car.kmtot }}</h4></h2>
+{% for ccd in ccds %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ ccd.name }} </a></h3>
+                           <h5><a>Average Life in SS Kms: {{ ccd.avg }}</a></h5>
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccd.ccd_detail', ccd_id=ccd.id) }}">Manage</a>
+         </div>
+              <table class="table table-hover table-responsive">
+      <thead>
+        <tr>
+            <th scope="col">Cost Profiles</th>
+          <th scope="col">Notes</th>
+        </tr>
+      </thead>
+          {% for ccp in ccd.ccp %}
+        <tr href="#">
+            <th scope="row">{{ccp.name}}</th>
+            <th scope="row">{{ccp.notes}}</th>
+        </tr>
+        {% endfor %}
+    </table>
+          </div>
+    </article>
+        {% endfor %}
+{% if ccds.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No cost drivers added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}
+{% block feed %}
+<div class="content-section">
+    <ul class="nav flex-column nav-pills nav-fill">
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('ccp.ccp_detail', ccp_id=ccp.id, car_id=car.id) }}">Cost Drivers</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Restores</a>
+  </li>
+    </ul>
+</div>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ ccpform.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ ccpform.name.label(class="form-control-label") }}
+                {% if ccpform.name.errors %}
+                    {{ ccpform.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in ccpform.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ ccpform.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ ccpform.notes.label(class="form-control-label") }}
+                {% if ccpform.notes.errors %}
+                    {{ ccpform.notes(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in ccpform.notes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ ccpform.notes(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ ccpform.submitupccp(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+    <h4>Used in Events</h4>
+{% for event in eventlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ event.name }}</a></h3>
+                           <h5><a>{{ event.start.strftime(format='%d-%m-%Y') }} - {{ event.end.strftime(format='%d-%m-%Y') }}</a></h5>
+
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.event_detail', event_id=event.id) }}">Manage</a>
+         </div>
+          </div>
+    </article>
+        {% endfor %}
+{% if eventlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No events added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock feed %}

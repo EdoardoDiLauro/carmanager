@@ -8,9 +8,9 @@ from datetime import datetime, time
 
 acp = Blueprint('acp', __name__)
 
-@acp.route("/acp/new" , methods=['GET', 'POST'])
+@acp.route("/acp/new/<int:event_id>" , methods=['GET', 'POST'])
 @login_required
-def create_acp():
+def create_acp(event_id):
     if not current_user.is_authenticated:
         flash('Please log in to access current page', 'danger')
         return redirect(url_for('main.home'))
@@ -23,5 +23,5 @@ def create_acp():
         db.session.add(new_acp)
         db.session.commit()
         flash('New Activity Cost Profile successfully added', 'success')
-        return redirect(url_for('events.overview'))
+        return redirect(url_for('events.event_detail', event_id=event_id))
     return render_template('create_acp.html', title='Add Activity Cost Profile', form=form, legend='Add Activity Cost Profile')

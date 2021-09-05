@@ -11,16 +11,18 @@ class SpareForm (FlaskForm) :
                        validators=[DataRequired()])
     name = StringField('Name',
                         validators=[DataRequired()])
-    isnew = RadioField('', choices=[(1, 'Yes'), (0, 'No')], coerce=int, validators=[Optional()])
+    isnew = RadioField('Brand New Spare Part:', choices=[(1, 'Yes'), (0, 'No')], coerce=int, validators=[Optional()])
     price = DecimalField('Price',
                         validators=[DataRequired()])
     notes = TextAreaField('Notes')
     submit = SubmitField('Add Spare Part')
+    submitup = SubmitField('Update Spare Part')
+
 
 class SpareFormDash (FlaskForm) :
     spid = HiddenField()
     select = RadioField('', choices=[(1, ' '), (0, 'No')], coerce=int, validators=[Optional()])
-    name = StringField('Name',
+    nome = StringField('Name',
                        validators=[DataRequired()])
     isnew = RadioField('', choices=[(1, 'Yes'), (0, 'No')], coerce=int, validators=[Optional()])
     price = DecimalField('Price',
@@ -28,7 +30,7 @@ class SpareFormDash (FlaskForm) :
     notes = TextAreaField('Notes')
 
 class SpareDashForm (Form):
-    spares = FieldList(FormField(SpareFormDash))
+    sps = FieldList(FormField(SpareFormDash))
     submit = SubmitField('Assign Selected Spares')
     submitoff = SubmitField('Discard Selected Spares')
     submitres = SubmitField('Restore Cost Driver')

@@ -9,5 +9,15 @@ class InvoiceForm (FlaskForm) :
     regdate = DateField('Date',
                     validators=[DataRequired()], format='%Y-%m-%d')
     doc = FileField('Attached File (Allowed Extensions: txt, pdf, png, jpg, jpeg)')
+    supplier = StringField('Supplier',
+                       validators=[DataRequired()])
     notes = TextAreaField('Notes')
     submit = SubmitField('Add New Invoice')
+    submitup = SubmitField('Update Invoice')
+
+class UpdateInvoiceForm (FlaskForm) :
+    regdate = DateField('Date', format='%Y-%m-%d')
+    doc = FileField('Attached File (Allowed Extensions: txt, pdf, png, jpg, jpeg)')
+    supplier = StringField('Supplier')
+    notes = TextAreaField('Notes')
+    submitup = SubmitField('Update Invoice')

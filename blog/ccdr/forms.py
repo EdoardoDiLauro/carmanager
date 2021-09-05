@@ -6,6 +6,8 @@ from wtforms.fields.html5 import DateTimeLocalField, DateField, TimeField
 from wtforms.validators import DataRequired, Length, Optional
 
 class CcdrForm (FlaskForm) :
+    name = StringField('Name',
+                       validators=[DataRequired()])
     notes = TextAreaField('Notes')
 
-    submit = SubmitField('Restore Cost Driver')
+    submitccdr = SubmitField('Restore Cost Driver')

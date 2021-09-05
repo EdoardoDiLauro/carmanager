@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<h2>Update Activity</h2>
 <div class="content-section">
     <form method="POST" action="" enctype="multipart/form-data">
         {{ acpform.hidden_tag() }}
@@ -33,7 +34,42 @@
             </div>
         </fieldset>
         <div class="form-group">
-            {{ acpform.submit(class="btn btn-outline-info") }}
+            {{ acpform.submitacpup(class="btn btn-outline-info") }}
+        </div>
+    </form>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ newacdform.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ newacdform.name.label(class="form-control-label") }}
+                {% if newacdform.name.errors %}
+                    {{ newacdform.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in newacdform.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ newacdform.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ newacdform.value.label(class="form-control-label") }}
+                {% if newacdform.value.errors %}
+                    {{ newacdform.value(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in newacdform.value.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ newacdform.value(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ newacdform.submitacd(class="btn btn-outline-info") }}
         </div>
     </form>
     <form method="POST" action="" enctype="multipart/form-data">
@@ -41,20 +77,25 @@
     <table class="table table-hover table-responsive">
       <thead>
         <tr>
-            <th scope="col">Name</th>
+                        <th scope="col">Name</th>
             <th scope="col">Value</th>
-          <th scope="col">Notes</th>
+                        <th scope="col"></th>
+                                    <th scope="col"></th>
+
         </tr>
       </thead>
         {% for acd in dashform.cds %}
         <tr href="#">
-            <th scope="row">{{acd.cdid}}{{acd.name(readonly=False)}}</th>
+                        <th scope="row">{{acd.cdid}}{{acd.nome}}</th>
             <th scope="row">{{acd.value(readonly=False)}}</th>
-            <th scope="row">{{acd.notes(readonly=False)}}</th>
+                        <th scope="row">   <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acd.update_acd', acd_id=acd.cdid.data, act_id=act.id) }}">Update</a></th>
+            <th scope="row">   <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acd.delete_acd', acd_id=acd.cdid.data, act_id=act.id) }}">Delete</a></th>
         </tr>
         {% endfor %}
     </table>
         </form>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('activities.calc_totcostact', act_id=act.id) }}">Calculate Activity Cost</a>
+
 </div>
 {% endblock content %}
 {% block feed %}
@@ -71,6 +112,8 @@
   </li>
     </ul>
 </div>
+<h4>Activity Cost: {{ act.totcostact }}</h4>
+<h4>Spares Cost: {{ act.totcostspares }}</h4>
 <div class="content-section">
     <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -141,7 +184,7 @@
                     {{ form.acp(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acp.create_acp') }}">Create New Activity Cost Profile</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('acp.create_acp', event_id=event.id) }}">Create New Activity Cost Profile</a>
             <div class="form-group">
                 {{ form.kmssact.label(class="form-control-label") }}
                 {% if form.kmssact.errors %}

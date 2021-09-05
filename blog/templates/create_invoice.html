@@ -18,6 +18,19 @@
                     {{ form.regdate(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+            <div class="form-group">
+                {{ form.supplier.label(class="form-control-label") }}
+                {% if form.supplier.errors %}
+                    {{ form.supplier(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.supplier.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.supplier(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
           <div class="form-group">
                 {{ form.doc.label(class="form-control-label") }}
                 {% if form.doc.errors %}

@@ -6,6 +6,20 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{legend}} - {{car.brand}} {{car.model}} {{car.chassis}}</legend>
             <div class="form-group">
+                {{ form.ccp.label(class="form-control-label") }}
+                {% if form.ccp.errors %}
+                    {{ form.ccp(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.ccp.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.ccp(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('ccp.create_ccp', car_id=car.id) }}">Create New Car Cost Profile</a>
+            <div class="form-group">
                 {{ form.start.label(class="form-control-label") }}
                 {% if form.start.errors %}
                     {{ form.start(class="form-control form-control-lg is-invalid") }}
@@ -42,19 +56,6 @@
                     </div>
                 {% else %}
                     {{ form.name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.ccp.label(class="form-control-label") }}
-                {% if form.ccp.errors %}
-                    {{ form.ccp(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.ccp.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.ccp(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">

@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Update Car Cost Driver Details</legend>
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+          <div class="form-group">
+                {{ form.value.label(class="form-control-label") }}
+                {% if form.value.errors %}
+                    {{ form.value(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.value.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.value(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.elapsed.label(class="form-control-label") }}
+                {% if form.elapsed.errors %}
+                    {{ form.elapsed(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.elapsed.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.elapsed(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.avg.label(class="form-control-label") }}
+                {% if form.avg.errors %}
+                    {{ form.avg(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.avg.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.avg(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.limit.label(class="form-control-label") }}
+                {% if form.limit.errors %}
+                    {{ form.limit(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.limit.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.limit(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock content %}
+{% block feed %}
+<div class="content-section">
+    <legend class="border-bottom mb-4">Restores</legend>
+{% for ccdr in ccdrs %}
+    <div class="content-section">
+    <h4>Kms Elapsed: {{ccdr.elapsed}}</h4>
+    <h5>Reset Date: {{ ccdr.resdate.strftime(format='%d-%m-%Y') }}</h5>
+        <div class="card">
+    <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('activities.use_spare', act_id=ccdr.activity_id) }}">Spares Used</a>
+    </div>
+    </div>
+{% endfor %}
+  </div>
+{% endblock feed %}
+
+

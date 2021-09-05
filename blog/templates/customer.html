@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Events - {{customer.name}}</h2>
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ bindform.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add Event to Customer</legend>
+            <div class="form-group">
+                {{ bindform.evs.label(class="form-control-label") }}
+                {% if bindform.evs.errors %}
+                    {{ bindform.evs(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in bindform.evs.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ bindform.evs(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            </fieldset>
+        <div class="form-group">
+            {{ bindform.submitev(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% for event in eventlist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ event.name }}</a></h3>
+                           <h5><a>{{ event.start.strftime(format='%d-%m-%Y') }} - {{ event.end.strftime(format='%d-%m-%Y') }}</a></h5>
+
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('events.event_detail', event_id=event.id) }}">Manage</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('customers.unbind_event', event_id=event.id, customer_id=customer.id) }}">Unbind</a>
+         </div>
+          </div>
+    </article>
+        {% endfor %}
+{% if eventlist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No events added yet</a></h4>
+          </div>
+</article>
+{% endif %}
+{% endblock content %}
+{% block feed %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.address.label(class="form-control-label") }}
+                {% if form.address.errors %}
+                    {{ form.address(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.address.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.address(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.notes.label(class="form-control-label") }}
+                {% if form.notes.errors %}
+                    {{ form.notes(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.notes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.notes(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submitup(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+{% endblock feed %}

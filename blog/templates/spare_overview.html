@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Available Spare Parts</h2>
+{% for spare in newsparelist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ spare.name }} </a></h3>
+                           <h5><a>Price: {{ spare.price }}</a></h5>
+
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('spares.spare_detail', spare_id=spare.id) }}">Update</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('spares.delete_spare', spare_id=spare.id) }}">Delete</a>
+         </div>
+              <div class="card-header">{{spare.notes}}</div>
+          </div>
+    </article>
+        {% endfor %}
+{% if newsparelist.count()==0 %}
+<article class="media content-section">
+          <div class="media-body">
+                          <h4><a>No spare parts available</a></h4>
+          </div>
+</article>
+{% endif %}
+    <h2>Used Spare Parts</h2>
+{% for spare in usedsparelist %}
+<article class="media content-section">
+          <div class="media-body">
+         <div class="article-metadata">
+             <h3><a class="mr-2">{{ spare.name }} </a></h3>
+                           <h5><a>Price: {{ spare.price }}</a></h5>
+
+             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('spares.spare_detail', spare_id=spare.id) }}">Update</a>
+              <a class="btn btn-danger btn-sm m-1"  href="{{ url_for('spares.delete_spare', spare_id=spare.id) }}">Delete</a>
+         </div>
+              <div class="card-header">{{spare.notes}}</div>
+          </div>
+    </article>
+        {% endfor %}
+
+{% endblock content %}
